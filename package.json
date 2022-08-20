@@ -1,0 +1,46 @@
+{
+  "name": "skr",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "fmt": "prettier --write --config .prettierrc \"**/*{.tsx,.ts}\"",
+    "postinstall": "prisma generate",
+    "ts-node": "ts-node --compiler-options \"{\\\"module\\\":\\\"commonjs\\\"}\""
+  },
+  "dependencies": {
+    "@prisma/client": "^4.1.1",
+    "@trpc/client": "^9.26.2",
+    "@trpc/next": "^9.26.2",
+    "@trpc/react": "^9.26.2",
+    "@trpc/server": "^9.26.2",
+    "next": "12.2.3",
+    "pokenode-ts": "^1.16.0",
+    "react": "18.2.0",
+    "react-dnd": "^16.0.1",
+    "react-dnd-html5-backend": "^16.0.1",
+    "react-dom": "18.2.0",
+    "react-query": "^3.39.2",
+    "superjson": "^1.9.1",
+    "ts-node": "^10.9.1",
+    "zod": "^3.17.3",
+    "zustand": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "18.0.0",
+    "@types/react": "18.0.14",
+    "@types/react-dom": "18.0.5",
+    "eslint": "8.18.0",
+    "eslint-config-next": "12.2.3",
+    "prettier": "^2.7.1",
+    "prisma": "^4.1.1",
+    "sass": "^1.54.0",
+    "typescript": "4.7.4"
+  },
+  "prisma": {
+    "seed": "npm run ts-node -- scripts/seed.ts"
+  }
+}

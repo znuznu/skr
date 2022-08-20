@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  skr-db:
+    container_name: skr-db
+    restart: always
+    image: postgres:14.4-alpine
+    volumes:
+      - skr-db:/var/lib/postgresql/data
+    env_file:
+      - .env
+    networks:
+      - skr-network
+    ports:
+      - '5432:5432'
+  
+networks:
+  skr-network:
+
+volumes:
+  skr-db:

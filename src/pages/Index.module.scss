@@ -1,0 +1,109 @@
+// Pokemon
+
+.container {
+  display: flex;
+  flex-direction: column;
+  row-gap: 0.5rem;
+
+  &:hover {
+    cursor: grab;
+  }
+}
+
+.containerDisabled {
+  @extend .container;
+  opacity: 0.5;
+
+  &:hover {
+    cursor: default;
+  }
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  align-items: center;
+  border-radius: 6px;
+  row-gap: 1rem;
+}
+
+.heading {
+  display: flex;
+}
+
+.name {
+  margin: 0;
+  padding: 0;
+  text-transform: capitalize;
+}
+
+.dexId {
+  background-color: #ffffff;
+  color: #000000;
+  padding-left: 0.2rem;
+  padding-right: 0.1rem;
+  font-style: italic;
+  font-weight: 800;
+  border-top-left-radius: 4px;
+}
+
+// Could be ::after with ^
+.triangle {
+  content: '';
+  float: right;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 20px 10px 0 0;
+  border-color: #ffffff transparent transparent transparent;
+}
+
+// Choices
+
+.choices {
+  display: flex;
+  column-gap: 1rem;
+}
+
+// TypeChips
+
+.types {
+  display: flex;
+  column-gap: 0.4rem;
+}
+
+.typeChips {
+  border: 1px solid #ffffff;
+  border-radius: 4px;
+  text-transform: uppercase;
+  padding: 0 0.3rem;
+  color: #ffffff;
+  background-color: #000000;
+}
+
+// Drop zones
+
+.dropZone {
+  display: flex;
+  gap: 3rem;
+}
+
+.dropBox {
+  display: flex;
+  border-radius: 6px;
+  border: 3px dashed #ffffff;
+  width: 156px;
+  height: 156px;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+
+  p {
+    color: #868686;
+    font-size: 1.5rem;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+  }
+}
