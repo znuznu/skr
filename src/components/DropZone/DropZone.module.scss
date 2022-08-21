@@ -1,0 +1,23 @@
+.dropZone {
+  display: flex;
+  gap: 3rem;
+}
+
+.dropBox {
+  display: flex;
+  border-radius: 6px;
+  border: 3px dashed #ffffff;
+  width: 156px;
+  height: 156px;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+
+  p {
+    color: #868686;
+    font-size: 1.5rem;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+  }
+}

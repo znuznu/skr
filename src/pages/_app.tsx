@@ -6,11 +6,14 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
 import 'src/styles/globals.css';
+import Layout from '@/components/Layout';
 
 const MyApp: AppType = ({ Component, pageProps }) => {
   return (
     <DndProvider backend={HTML5Backend}>
-      <Component {...pageProps} />
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
     </DndProvider>
   );
 };
