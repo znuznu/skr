@@ -19,4 +19,34 @@ model Pokemon {
     jp_name String?
     artwork_url String?
     sprite_url String?
+
+    voteCount VoteCount?
+
+    VoteStore Vote[] @relation("voteStore")
+    VoteKeep Vote[] @relation("voteKeep")
+    VoteRelease Vote[] @relation("voteRelease")
 }
+
+model VoteCount {
+    id String @id @default(cuid())
+
+    storeCount BigInt
+    keepCount BigInt
+    releaseCount BigInt
+
+    pokemon Pokemon @relation(fields: [pokemonId], references: [id])
+    pokemonId String @unique
+}
+
+model Vote {
+    id String @id @default(cuid())
+    createdAt DateTime @default(now())
+
+    store Pokemon @relation(name: "voteStore", fields: [storeId], references: [id])
+    storeId String
+    keep Pokemon @relation(name: "voteKeep", fields: [keepId], references: [id])
+    keepId String
+    release Pokemon @relation(name: "voteRelease", fields: [releaseId], references: [id])
+    releaseId String
+}
+
