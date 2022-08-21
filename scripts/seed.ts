@@ -47,7 +47,9 @@ const createCsv = async () => {
 };
 
 const seed = async () => {
-  await createCsv();
+  if (!fs.existsSync('pokemon.csv')) {
+    await createCsv();
+  }
 
   fs.readFile(CSV_FILE, 'utf8', async (err, data) => {
     if (err) {
