@@ -8,8 +8,14 @@ export const votingRouter = createRouter().mutation('commit', {
     store: z.object({ pokemonId: z.string() })
   }),
   async resolve({ input, ctx }) {
-    console.log('Received ', input);
+    const vote = await ctx.prisma.vote.create({
+      data: {
+        storeId: input.store.pokemonId,
+        keepId: input.keep.pokemonId,
+        releaseId: input.release.pokemonId
+      }
+    });
 
-    return 'todo!()';
+    return vote;
   }
 });
