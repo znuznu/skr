@@ -15,8 +15,9 @@ const isTypeWrapper = (o: unknown): o is TypeWrapper => {
 type DropBoxProps = {
   label: string;
   type: BoxType;
+  text: string;
 };
-const DropBox = ({ label, type }: DropBoxProps) => {
+const DropBox = ({ label, type, text }: DropBoxProps) => {
   const { add, boxes, switchBox } = useBoxState();
 
   const [, drop] = useDrop(
@@ -44,8 +45,9 @@ const DropBox = ({ label, type }: DropBoxProps) => {
 
   return (
     <div>
-      <span>{label}</span>
+      <div className={styles.boxLabel}>{label}</div>
       <div className={styles.dropBox} ref={drop}>
+        {boxes[type] === undefined && <p>{text}</p>}
         {boxes[type]?.artworkUrl && (
           <div ref={drag}>
             <Image
@@ -66,9 +68,9 @@ const DropBox = ({ label, type }: DropBoxProps) => {
 const DropZone = () => {
   return (
     <div className={styles.dropZone}>
-      <DropBox label="Store in PC" type={'store'} />
-      <DropBox label="Keep in your team" type={'keep'} />
-      <DropBox label="Release in the wild" type={'release'} />
+      <DropBox label="Store" type={'store'} text={'Put in Storage System'} />
+      <DropBox label="Keep" type={'keep'} text={'Keep in your team'} />
+      <DropBox label="Release" type={'release'} text={'Release in the wild'} />
     </div>
   );
 };

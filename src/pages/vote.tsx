@@ -23,7 +23,7 @@ const Vote: NextPage = () => {
   return (
     <div className={styles.vote}>
       <p className={styles.help}>
-        To play, simply drag and drop the pokemon in the boxes of your choice (you can
+        To play, simply drag and drop the Pokemon in the boxes of your choice (you can
         switch them too) and press the VOTE button.
       </p>
       {data ? (

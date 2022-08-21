@@ -8,7 +8,7 @@ const Home: NextPage = () => {
     <div className={styles.home}>
       <p>
         This website is based on the popular <em>Kiss, Marry, Kill game</em>, but you must
-        choose between keeping a pokemon in your team, storing one in your PC and
+        choose between keeping a Pokemon in your team, storing one in your PC and
         releasing one into the wild.
       </p>
     </div>
