@@ -202,9 +202,9 @@ const Home: NextPage = () => {
           onClick={() => {
             if (boxes.keep && boxes.release && boxes.store) {
               mutate({
-                keep: boxes.keep.dexId,
-                release: boxes.release.dexId,
-                store: boxes.store.dexId
+                store: { pokemonId: boxes.store.id },
+                release: { pokemonId: boxes.release.id },
+                keep: { pokemonId: boxes.keep.id }
               });
             }
           }}
