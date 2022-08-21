@@ -1,3 +1,4 @@
+import Button from '@/components/primitives/Button';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
@@ -25,6 +26,7 @@ interface BoxState {
   switchBox: (a: BoxType, b: BoxType) => void;
   emptyAll: () => void;
   contains: (dexId: number) => boolean;
+  isFull: () => boolean;
 }
 
 const emptyBoxes = { store: undefined, keep: undefined, release: undefined };
@@ -44,6 +46,13 @@ const useBoxState = create<BoxState>()((set, get) => ({
       get().boxes.store?.dexId === dexId ||
       get().boxes.keep?.dexId === dexId ||
       get().boxes.release?.dexId === dexId
+    );
+  },
+  isFull: () => {
+    return (
+      get().boxes.store !== undefined &&
+      get().boxes.keep !== undefined &&
+      get().boxes.release !== undefined
     );
   }
 }));
@@ -175,7 +184,7 @@ const DropZone = () => {
 };
 
 const Home: NextPage = () => {
-  const { boxes, emptyAll } = useBoxState();
+  const { boxes, emptyAll, isFull } = useBoxState();
   const { data, refetch } = trpc.useQuery(['pokemon.getThreePokemon']);
   const { mutate } = trpc.useMutation(['vote.commit'], {
     onMutate: () => {
@@ -196,22 +205,8 @@ const Home: NextPage = () => {
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <h1>Store, Keep, Release</h1>
+      <h1 className={styles.title}>Store, Keep, Release</h1>
       <main>
-        <button
-          onClick={() => {
-            if (boxes.keep && boxes.release && boxes.store) {
-              mutate({
-                store: { pokemonId: boxes.store.id },
-                release: { pokemonId: boxes.release.id },
-                keep: { pokemonId: boxes.keep.id }
-              });
-            }
-          }}
-        >
-          Click me to mutate
-        </button>
-        <DropZone />
         {data ? (
           <div className={styles.choices}>
             <PokemonContainer pokemon={data.first} />
@@ -221,6 +216,22 @@ const Home: NextPage = () => {
         ) : (
           <p>Loading...</p>
         )}
+        <DropZone />
+        <Button
+          onClick={() => {
+            if (boxes.keep && boxes.release && boxes.store) {
+              mutate({
+                store: { pokemonId: boxes.store.id },
+                release: { pokemonId: boxes.release.id },
+                keep: { pokemonId: boxes.keep.id }
+              });
+            }
+          }}
+          disabled={!isFull()}
+          ariaLabel={'Click to vote'}
+        >
+          Vote
+        </Button>
       </main>
     </>
   );
