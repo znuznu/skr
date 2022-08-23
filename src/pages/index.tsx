@@ -5,7 +5,7 @@ import React from 'react';
 import styles from './Index.module.scss';
 
 const Home: NextPage = () => {
-  const { data: totalCount } = trpc.useQuery(['vote.getTotal']);
+  const { data: totalCount } = trpc.useQuery(['results.total']);
 
   return (
     <div className={styles.home}>

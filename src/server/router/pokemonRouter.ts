@@ -2,8 +2,8 @@ import { Pokemon as PrismaPokemon } from '.prisma/client';
 import { TRPCError } from '@trpc/server';
 import { createRouter } from './context';
 
-export const pokemonRouter = createRouter().query('getThreePokemon', {
-  async resolve({ ctx }) {
+export const pokemonRouter = createRouter().query('threePokemon', {
+  resolve: async ({ ctx }) => {
     const [first, second, third] = getThreeRandomDexIds();
 
     const choosenPokemon = await ctx.prisma.pokemon.findMany({

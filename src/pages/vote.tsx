@@ -10,7 +10,7 @@ import styles from './Vote.module.scss';
 
 const Vote: NextPage = () => {
   const { boxes, emptyAll, isFull } = useBoxState();
-  const { data, refetch } = trpc.useQuery(['pokemon.getThreePokemon']);
+  const { data, refetch } = trpc.useQuery(['pokemon.threePokemon']);
   const { mutate } = trpc.useMutation(['vote.commit'], {
     onMutate: () => {
       emptyAll();
