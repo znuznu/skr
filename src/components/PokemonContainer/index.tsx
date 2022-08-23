@@ -14,7 +14,7 @@ const TypeChips = ({ type }: TypeChipsProps) => {
   return <span className={styles.typeChips}>{type}</span>;
 };
 
-export type Pokemon = inferQueryOutput<'pokemon.getThreePokemon'>['first'];
+export type Pokemon = inferQueryOutput<'pokemon.threePokemon'>['first'];
 
 type PokemonContainerProps = {
   pokemon: Pokemon;

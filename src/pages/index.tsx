@@ -15,7 +15,7 @@ const Home: NextPage = () => {
         releasing one into the wild.
       </p>
       <h1>Hall of fame</h1>
-      {totalCount && <p>Total votes: {totalCount} </p>}
+      <p>Total votes: {totalCount} </p>
     </div>
   );
 };
