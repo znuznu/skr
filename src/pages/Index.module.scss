@@ -1,9 +1,17 @@
 .home {
   max-width: 600px;
   font-size: 1.3rem;
-  text-align: center;
 
   & > :not(:last-child) {
     margin-bottom: 3rem;
   }
+}
+
+.home > h1 {
+  text-align: center;
+  font-size: 1.8rem;
+}
+
+.explanation {
+  text-align: center;
 }
