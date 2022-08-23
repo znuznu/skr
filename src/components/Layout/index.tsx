@@ -17,6 +17,9 @@ export const Layout = ({ children }: LayoutProps) => {
         <li>
           <Link href="/vote">Vote</Link>
         </li>
+        <li>
+          <Link href="/results">Results</Link>
+        </li>
       </ul>
       <main>{children}</main>
     </>

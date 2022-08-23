@@ -1,0 +1,36 @@
+.resultsTable {
+  min-width: 600px;
+
+  thead tr {
+    border-bottom: 1px solid #ffffff;
+  }
+
+  tbody tr:not(:last-child) {
+    border-bottom: 1px solid #ffffff;
+  }
+
+  th,
+  td {
+    padding: 0.5rem;
+  }
+
+  th {
+    font-weight: 800;
+  }
+
+  td {
+    text-align: center;
+    vertical-align: middle;
+  }
+}
+
+.tdName {
+  display: flex;
+  align-items: center;
+}
+
+.dexId {
+  color: #ffffff;
+  font-style: italic;
+  font-weight: 900;
+}
