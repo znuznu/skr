@@ -27,8 +27,11 @@ textarea {
 }
 
 :root {
-  --color-fg: #fff;
-  --color-bg: #000;
+  --color-bg: #151718;
+  --color-fg-strong: #ecedee;
+  --color-fg-light: #9ba1a6;
+  --color-border-light: #313538;
+  --color-border-strong: #4c5155;
 }
 
 html,
@@ -39,7 +42,7 @@ body {
     Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
   font-size: 100%;
   background-color: var(--color-bg);
-  color: var(--color-fg);
+  color: var(--color-fg-strong);
 }
 
 main {

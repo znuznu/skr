@@ -46,7 +46,7 @@ const DropBox = ({ label, type, text }: DropBoxProps) => {
   return (
     <div>
       <div className={styles.boxLabel}>{label}</div>
-      <div className={styles.dropBox} ref={drop}>
+      <div className={boxes[type] ? styles.dropBoxFull : styles.dropBoxEmpty} ref={drop}>
         {boxes[type] === undefined && <p>{text}</p>}
         {boxes[type]?.artworkUrl && (
           <div ref={drag}>

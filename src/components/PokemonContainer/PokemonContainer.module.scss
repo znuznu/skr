@@ -37,7 +37,7 @@
 }
 
 .dexId {
-  background-color: var(--color-fg);
+  background-color: var(--color-fg-strong);
   color: var(--color-bg);
   padding-left: 0.2rem;
   padding-right: 0.1rem;
@@ -54,7 +54,7 @@
   height: 0;
   border-style: solid;
   border-width: 20px 10px 0 0;
-  border-color: var(--color-fg) transparent transparent transparent;
+  border-color: var(--color-fg-strong) transparent transparent transparent;
 }
 
 .types {
@@ -63,10 +63,10 @@
 }
 
 .typeChips {
-  border: 1px solid var(--color-fg);
+  border: 1px solid var(--color-border-light);
   border-radius: 4px;
   text-transform: uppercase;
   padding: 0 0.3rem;
-  color: var(--color-fg);
+  color: var(--color-fg-light);
   background-color: var(--color-bg);
 }

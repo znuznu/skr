@@ -18,12 +18,12 @@
 }
 
 .navbar > li {
-  border-bottom: 1px solid gray;
-  color: lightgray;
+  border-bottom: 1px solid var(--color-fg-light);
+  color: var(--color-fg-light);
   cursor: pointer;
 
   &:hover {
-    color: var(--color-fg);
-    border-color: var(--color-fg);
+    color: var(--color-fg-strong);
+    border-color: var(--color-fg-strong);
   }
 }

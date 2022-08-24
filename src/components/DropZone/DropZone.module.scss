@@ -3,10 +3,10 @@
   gap: 3rem;
 }
 
-.dropBox {
+.dropBoxEmpty {
   display: flex;
   border-radius: 6px;
-  border: 3px dashed var(--color-fg);
+  border: 3px dashed var(--color-border-light);
   width: 156px;
   height: 156px;
   align-items: center;
@@ -14,12 +14,17 @@
   padding: 1rem;
 
   p {
-    color: #868686;
+    color: var(--color-fg-light);
     font-size: 1.5rem;
     text-align: center;
     margin: 0;
     padding: 0;
   }
+}
+
+.dropBoxFull {
+  @extend .dropBoxEmpty;
+  border: 3px solid var(--color-border-strong);
 }
 
 .boxLabel {
