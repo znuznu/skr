@@ -6,7 +6,7 @@
 .dropBox {
   display: flex;
   border-radius: 6px;
-  border: 3px dashed #ffffff;
+  border: 3px dashed var(--color-fg);
   width: 156px;
   height: 156px;
   align-items: center;

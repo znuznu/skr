@@ -26,6 +26,11 @@ textarea {
   white-space: revert;
 }
 
+:root {
+  --color-fg: #fff;
+  --color-bg: #000;
+}
+
 html,
 body {
   padding: 0;
@@ -33,8 +38,8 @@ body {
   font-family: Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu,
     Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
   font-size: 100%;
-  background-color: #000000;
-  color: #ffffff;
+  background-color: var(--color-bg);
+  color: var(--color-fg);
 }
 
 main {
