@@ -22,25 +22,37 @@ const Results: NextPage = () => {
       <tbody>
         {data &&
           data.map((result) => (
-            <tr>
+            <tr key={result.dexId}>
               <td>
                 <span className={styles.dexId}>#{result.dexId}</span>
               </td>
               <td className={styles.tdName}>
-                <div>
-                  <Image
-                    src={result.spriteUrl}
-                    width={96}
-                    height={96}
-                    layout="fixed"
-                    quality="100"
-                  />
-                </div>
+                {result.spriteUrl && (
+                  <div>
+                    <Image
+                      src={result.spriteUrl}
+                      width={96}
+                      height={96}
+                      layout="fixed"
+                      quality="100"
+                    />
+                  </div>
+                )}
                 {result.jpName ? result.jpName : result.enName}
               </td>
-              <td>{result.resultsInPercentage.store}</td>
-              <td>{result.resultsInPercentage.keep}</td>
-              <td>{result.resultsInPercentage.release}</td>
+              {result.resultsInPercentage ? (
+                <>
+                  <td>{result.resultsInPercentage.store}%</td>
+                  <td>{result.resultsInPercentage.keep}%</td>
+                  <td>{result.resultsInPercentage.release}%</td>
+                </>
+              ) : (
+                <>
+                  <td>-</td>
+                  <td>-</td>
+                  <td>-</td>
+                </>
+              )}
             </tr>
           ))}
       </tbody>

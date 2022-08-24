@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { VoteCount } from '.prisma/client';
 import { createRouter } from './context';
 
 export const resultsRouter = createRouter()
@@ -9,31 +9,34 @@ export const resultsRouter = createRouter()
   })
   .query('infiniteResults', {
     resolve: async ({ ctx }) => {
-      return [
-        {
-          dexId: 1,
-          spriteUrl:
-            'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/6.png',
-          jpName: 'Tempura',
-          enName: 'Charizard',
-          resultsInPercentage: { store: 20, keep: 30, release: 50 }
+      const pokemonsAndVoteCounts = await ctx.prisma.pokemon.findMany({
+        take: 15,
+        include: {
+          voteCount: true
         },
-        {
-          dexId: 2,
-          spriteUrl:
-            'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png',
-          jpName: 'Piachinawa',
-          enName: 'Pikachu',
-          resultsInPercentage: { store: 8, keep: 90, release: 2 }
-        },
-        {
-          dexId: 567,
-          spriteUrl:
-            'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/320.png',
-          jpName: 'Some',
-          enName: 'Other one',
-          resultsInPercentage: { store: 15, keep: 15, release: 70 }
+        orderBy: {
+          dex_id: 'asc'
         }
-      ];
+      });
+
+      return pokemonsAndVoteCounts.map((pokemon) => ({
+        dexId: pokemon.dex_id,
+        spriteUrl: pokemon.sprite_url,
+        jpName: pokemon.jp_name,
+        enName: pokemon.en_name,
+        resultsInPercentage: pokemon.voteCount ? getPercentage(pokemon.voteCount) : null
+      }));
     }
   });
+
+const getPercentage = (voteCount: VoteCount) => {
+  const { storeCount, keepCount, releaseCount } = voteCount;
+
+  const total = storeCount + keepCount + releaseCount;
+
+  return {
+    store: (storeCount / total) * 100,
+    keep: (keepCount / total) * 100,
+    release: (releaseCount / total) * 100
+  };
+};
