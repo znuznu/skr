@@ -42,9 +42,9 @@ const Results: NextPage = () => {
               </td>
               {result.resultsInPercentage ? (
                 <>
-                  <td>{result.resultsInPercentage.store}%</td>
-                  <td>{result.resultsInPercentage.keep}%</td>
-                  <td>{result.resultsInPercentage.release}%</td>
+                  <td>{result.resultsInPercentage.store.toFixed(1)}%</td>
+                  <td>{result.resultsInPercentage.keep.toFixed(1)}%</td>
+                  <td>{result.resultsInPercentage.release.toFixed(1)}%</td>
                 </>
               ) : (
                 <>
