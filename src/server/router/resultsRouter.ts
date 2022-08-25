@@ -9,7 +9,7 @@ export const resultsRouter = createRouter()
   .query('infiniteResults', {
     resolve: async ({ ctx }) => {
       const pokemonsWithCounts = await ctx.prisma.pokemon.findMany({
-        take: 15,
+        take: 898,
         include: {
           voteCount: {
             select: {
