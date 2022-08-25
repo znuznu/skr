@@ -1,4 +1,3 @@
-import { VoteCount } from '.prisma/client';
 import { createRouter } from './context';
 
 export const resultsRouter = createRouter()
@@ -9,17 +8,24 @@ export const resultsRouter = createRouter()
   })
   .query('infiniteResults', {
     resolve: async ({ ctx }) => {
-      const pokemonsAndVoteCounts = await ctx.prisma.pokemon.findMany({
+      const pokemonsWithCounts = await ctx.prisma.pokemon.findMany({
         take: 15,
         include: {
-          voteCount: true
+          voteCount: {
+            select: {
+              storeCount: true,
+              keepCount: true,
+              releaseCount: true
+            }
+          }
         },
         orderBy: {
           dex_id: 'asc'
         }
       });
 
-      return pokemonsAndVoteCounts.map((pokemon) => ({
+      return pokemonsWithCounts.map((pokemon) => ({
+        id: pokemon.id,
         dexId: pokemon.dex_id,
         spriteUrl: pokemon.sprite_url,
         jpName: pokemon.jp_name,
@@ -29,9 +35,15 @@ export const resultsRouter = createRouter()
     }
   });
 
-const getPercentage = (voteCount: VoteCount) => {
-  const { storeCount, keepCount, releaseCount } = voteCount;
-
+const getPercentage = ({
+  storeCount,
+  keepCount,
+  releaseCount
+}: {
+  storeCount: number;
+  keepCount: number;
+  releaseCount: number;
+}) => {
   const total = storeCount + keepCount + releaseCount;
 
   return {
