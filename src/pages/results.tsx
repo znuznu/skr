@@ -9,10 +9,11 @@ import styles from './Results.module.scss';
 
 type ResultsPageProps = InferGetStaticPropsType<typeof getStaticProps>;
 
-const Results = ({ results }: ResultsPageProps) => {
+const Results = ({ results, total }: ResultsPageProps) => {
   return (
     <>
       <p className={styles.information}>Results are updated every hour.</p>
+      <p>Total votes: {total} </p>
       <table className={styles.resultsTable}>
         <thead>
           <tr>
@@ -25,11 +26,18 @@ const Results = ({ results }: ResultsPageProps) => {
         </thead>
         <tbody>
           {results.map((result) => (
-            <tr key={result.dexId}>
+            <tr
+              key={result.dexId}
+              title={
+                result.vote
+                  ? `Store: ${result.vote.store.count} | Keep: ${result.vote.keep.count} | Release: ${result.vote.release.count}`
+                  : `Store: 0 | Keep: 0 | Release: 0`
+              }
+            >
               <td>
                 <span className={styles.dexId}>#{result.dexId}</span>
               </td>
-              <td className={styles.tdName}>
+              <td className={styles.tdPokemon}>
                 {result.spriteUrl && (
                   <div>
                     <Image
@@ -41,13 +49,16 @@ const Results = ({ results }: ResultsPageProps) => {
                     />
                   </div>
                 )}
-                {result.jpName ? result.jpName : result.enName}
+                <div className={styles.tdNames}>
+                  <span>{result.enName}</span>
+                  <span className={styles.jpName}>{result.jpName}</span>
+                </div>
               </td>
-              {result.resultsInPercentage ? (
+              {result.vote ? (
                 <>
-                  <td>{result.resultsInPercentage.store.toFixed(1)}%</td>
-                  <td>{result.resultsInPercentage.keep.toFixed(1)}%</td>
-                  <td>{result.resultsInPercentage.release.toFixed(1)}%</td>
+                  <td>{result.vote.store.percentage.toFixed(1)}%</td>
+                  <td>{result.vote.keep.percentage.toFixed(1)}%</td>
+                  <td>{result.vote.release.percentage.toFixed(1)}%</td>
                 </>
               ) : (
                 <>
@@ -76,7 +87,8 @@ export const getStaticProps = async () => {
 
   return {
     props: {
-      results: await ssg.fetchQuery('results.infiniteResults')
+      results: await ssg.fetchQuery('results.infiniteResults'),
+      total: await ssg.fetchQuery('results.total')
     },
     revalidate: REVALIDATE_TIME_IN_SECONDS
   };

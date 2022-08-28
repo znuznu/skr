@@ -30,12 +30,12 @@ export const resultsRouter = createRouter()
         spriteUrl: pokemon.sprite_url,
         jpName: pokemon.jp_name,
         enName: pokemon.en_name,
-        resultsInPercentage: pokemon.voteCount ? getPercentage(pokemon.voteCount) : null
+        vote: pokemon.voteCount ? getVoteDetails(pokemon.voteCount) : null
       }));
     }
   });
 
-const getPercentage = ({
+const getVoteDetails = ({
   storeCount,
   keepCount,
   releaseCount
@@ -47,8 +47,8 @@ const getPercentage = ({
   const total = storeCount + keepCount + releaseCount;
 
   return {
-    store: (storeCount / total) * 100,
-    keep: (keepCount / total) * 100,
-    release: (releaseCount / total) * 100
+    store: { percentage: (storeCount / total) * 100, count: storeCount },
+    keep: { percentage: (keepCount / total) * 100, count: keepCount },
+    release: { percentage: (releaseCount / total) * 100, count: releaseCount }
   };
 };

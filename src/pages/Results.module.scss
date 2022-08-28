@@ -24,9 +24,21 @@
   }
 }
 
-.tdName {
+.tdPokemon {
   display: flex;
+  justify-content: space-around;
   align-items: center;
+}
+
+.tdNames {
+  display: flex;
+  justify-content: start;
+  flex-direction: column;
+  text-transform: capitalize;
+}
+
+.jpName {
+  color: var(--color-border-light);
 }
 
 .dexId {
