@@ -6,7 +6,8 @@ const Footer = () => {
   return (
     <div className={styles.footer}>
       <p>
-        Store, Keep, Release is Copyright (c) - <strong>znu</strong> under MIT license
+        Store, Keep, Release is Copyright (c) - <strong>Arthur 'znu' F.</strong> under MIT
+        license
       </p>
       <p>
         This project uses data from the <Link href="https://pokeapi.co/">PokéAPI</Link>{' '}
