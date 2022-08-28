@@ -1,6 +1,65 @@
-.container {
+.dexId {
+  grid-area: header;
+
+  padding: 0 0.2rem;
+  border-radius: 4px;
+  background-color: var(--color-fg-strong);
+  color: var(--color-bg);
+  font-weight: 800;
+  font-size: 1rem;
+}
+
+.enName {
+  grid-area: mainBottom;
+  justify-self: center;
+
+  margin: 0;
+  padding: 0;
+  text-transform: capitalize;
+}
+
+.jpName {
+  grid-area: mainTopLeft;
+  justify-self: center;
+  align-self: center;
+
+  color: var(--color-border-light);
+  font-weight: bold;
+  font-size: 1.5rem;
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+}
+
+.artwork {
+  grid-area: mainTopRight;
+}
+
+.types {
+  grid-area: footer;
+  justify-self: center;
+
   display: flex;
-  flex-direction: column;
+  column-gap: 0.4rem;
+}
+
+.typeChips {
+  border: 1px solid var(--color-border-light);
+  border-radius: 4px;
+  text-transform: uppercase;
+  padding: 0 0.3rem;
+  color: var(--color-fg-light);
+  background-color: var(--color-bg);
+}
+
+.container {
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-template-rows: auto;
+  grid-template-areas:
+    'header .'
+    'mainTopLeft mainTopRight'
+    'mainBottom mainBottom'
+    'footer footer';
   row-gap: 0.5rem;
 
   &:hover {
@@ -15,58 +74,4 @@
   &:hover {
     cursor: default;
   }
-}
-
-.content {
-  display: flex;
-  flex-direction: column;
-  text-align: center;
-  align-items: center;
-  border-radius: 6px;
-  row-gap: 1rem;
-}
-
-.heading {
-  display: flex;
-}
-
-.name {
-  margin: 0;
-  padding: 0;
-  text-transform: capitalize;
-}
-
-.dexId {
-  background-color: var(--color-fg-strong);
-  color: var(--color-bg);
-  padding-left: 0.2rem;
-  padding-right: 0.1rem;
-  font-style: italic;
-  font-weight: 800;
-  border-top-left-radius: 4px;
-}
-
-// Could be ::after with ^
-.triangle {
-  content: '';
-  float: right;
-  width: 0;
-  height: 0;
-  border-style: solid;
-  border-width: 20px 10px 0 0;
-  border-color: var(--color-fg-strong) transparent transparent transparent;
-}
-
-.types {
-  display: flex;
-  column-gap: 0.4rem;
-}
-
-.typeChips {
-  border: 1px solid var(--color-border-light);
-  border-radius: 4px;
-  text-transform: uppercase;
-  padding: 0 0.3rem;
-  color: var(--color-fg-light);
-  background-color: var(--color-bg);
 }

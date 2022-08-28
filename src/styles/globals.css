@@ -38,8 +38,7 @@ html,
 body {
   padding: 0;
   margin: 0;
-  font-family: Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu,
-    Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  font-family: Inter;
   font-size: 100%;
   background-color: var(--color-bg);
   color: var(--color-fg-strong);
@@ -50,7 +49,7 @@ main {
   flex-direction: column;
   align-items: center;
   row-gap: 3rem;
-  margin: 0 3rem;
+  margin: 0 3rem 1rem;
 }
 
 em {

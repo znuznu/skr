@@ -35,12 +35,12 @@ const PokemonContainer = ({ pokemon }: PokemonContainerProps) => {
 
   return (
     <div className={isDisabled ? styles.containerDisabled : styles.container}>
-      <div className={styles.heading}>
-        <span className={styles.dexId}>#{pokemon.dexId}</span>
-        <span className={styles.triangle}></span>
-      </div>
+      <span className={styles.dexId}>
+        <em>#{pokemon.dexId}</em>
+      </span>
+      {pokemon.jpName && <h1 className={styles.jpName}>{pokemon.jpName}</h1>}
       {pokemon.artworkUrl && (
-        <div ref={drag}>
+        <div className={styles.artwork} ref={drag}>
           <Image
             src={pokemon.artworkUrl}
             width={156}
@@ -50,13 +50,11 @@ const PokemonContainer = ({ pokemon }: PokemonContainerProps) => {
           />
         </div>
       )}
-      <div className={styles.content}>
-        <h1 className={styles.name}>{pokemon.jpName ?? pokemon.enName}</h1>
-        <div className={styles.types}>
-          {pokemon.types.map((type) => (
-            <TypeChips key={`${pokemon.id}-${type}`} type={type} />
-          ))}
-        </div>
+      <h1 className={styles.enName}>{pokemon.enName}</h1>
+      <div className={styles.types}>
+        {pokemon.types.map((type) => (
+          <TypeChips key={`${pokemon.id}-${type}`} type={type} />
+        ))}
       </div>
     </div>
   );
