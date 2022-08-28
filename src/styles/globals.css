@@ -65,6 +65,14 @@ a {
   cursor: pointer;
 }
 
+a:visited {
+  color: var(--color-fg-light);
+}
+
+a:hover {
+  color: var(--color-fg-strong);
+}
+
 h1 {
   font-weight: 800;
 }
