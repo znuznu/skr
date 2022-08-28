@@ -65,6 +65,10 @@ a {
   cursor: pointer;
 }
 
+h1 {
+  font-weight: 800;
+}
+
 /* inter-regular - latin */
 @font-face {
   font-family: 'Inter';

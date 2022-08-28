@@ -1,0 +1,9 @@
+.link {
+  color: var(--color-fg-light);
+  border-bottom: 1px solid var(--color-fg-light);
+
+  &:hover {
+    color: var(--color-fg-strong);
+    cursor: pointer;
+  }
+}
