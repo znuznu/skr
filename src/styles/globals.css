@@ -28,6 +28,7 @@ textarea {
 
 :root {
   --color-bg: #151718;
+  --color-bg: #000;
   --color-fg-strong: #ecedee;
   --color-fg-light: #9ba1a6;
   --color-border-light: #313538;
@@ -49,11 +50,15 @@ main {
   flex-direction: column;
   align-items: center;
   row-gap: 3rem;
-  margin: 0 3rem 1rem;
+  margin: 1rem 3rem 1rem;
 }
 
 em {
   font-style: italic;
+}
+
+a {
+  cursor: pointer;
 }
 
 /* inter-regular - latin */

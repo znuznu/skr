@@ -4,26 +4,3 @@
   cursor: pointer;
   font-size: 2rem;
 }
-
-.navbar {
-  list-style: none;
-  font-size: 1.5rem;
-  display: flex;
-  justify-content: center;
-  margin: 2rem 0 5rem;
-
-  & > :not(:last-child) {
-    margin-right: 1rem;
-  }
-}
-
-.navbar > li {
-  border-bottom: 1px solid var(--color-fg-light);
-  color: var(--color-fg-light);
-  cursor: pointer;
-
-  &:hover {
-    color: var(--color-fg-strong);
-    border-color: var(--color-fg-strong);
-  }
-}
