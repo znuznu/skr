@@ -5,6 +5,8 @@ import type { InferGetStaticPropsType } from 'next';
 import Image from 'next/image';
 import React from 'react';
 
+import * as Table from '@/components/primitives/Table';
+
 import styles from './Results.module.scss';
 
 type ResultsPageProps = InferGetStaticPropsType<typeof getStaticProps>;
@@ -14,19 +16,19 @@ const Results = ({ results, total }: ResultsPageProps) => {
     <>
       <p className={styles.information}>Results are updated every hour.</p>
       <p>Total votes: {total} </p>
-      <table className={styles.resultsTable}>
-        <thead>
-          <tr>
-            <th>id</th>
-            <th>Name</th>
-            <th>Store</th>
-            <th>Keep</th>
-            <th>Release</th>
-          </tr>
-        </thead>
-        <tbody>
+      <Table.Root>
+        <Table.TableHead>
+          <Table.Row>
+            <Table.Head>id</Table.Head>
+            <Table.Head>Name</Table.Head>
+            <Table.Head>Store</Table.Head>
+            <Table.Head>Keep</Table.Head>
+            <Table.Head>Release</Table.Head>
+          </Table.Row>
+        </Table.TableHead>
+        <Table.Body>
           {results.map((result) => (
-            <tr
+            <Table.Row
               key={result.dexId}
               title={
                 result.vote
@@ -34,10 +36,10 @@ const Results = ({ results, total }: ResultsPageProps) => {
                   : `Store: 0 | Keep: 0 | Release: 0`
               }
             >
-              <td>
+              <Table.Data>
                 <span className={styles.dexId}>#{result.dexId}</span>
-              </td>
-              <td className={styles.tdPokemon}>
+              </Table.Data>
+              <Table.Data className={styles.tdPokemon}>
                 {result.spriteUrl && (
                   <div>
                     <Image
@@ -53,24 +55,24 @@ const Results = ({ results, total }: ResultsPageProps) => {
                   <span>{result.enName}</span>
                   <span className={styles.jpName}>{result.jpName}</span>
                 </div>
-              </td>
+              </Table.Data>
               {result.vote ? (
                 <>
-                  <td>{result.vote.store.percentage.toFixed(1)}%</td>
-                  <td>{result.vote.keep.percentage.toFixed(1)}%</td>
-                  <td>{result.vote.release.percentage.toFixed(1)}%</td>
+                  <Table.Data>{result.vote.store.percentage.toFixed(1)}%</Table.Data>
+                  <Table.Data>{result.vote.keep.percentage.toFixed(1)}%</Table.Data>
+                  <Table.Data>{result.vote.release.percentage.toFixed(1)}%</Table.Data>
                 </>
               ) : (
                 <>
-                  <td>-</td>
-                  <td>-</td>
-                  <td>-</td>
+                  <Table.Data>-</Table.Data>
+                  <Table.Data>-</Table.Data>
+                  <Table.Data>-</Table.Data>
                 </>
               )}
-            </tr>
+            </Table.Row>
           ))}
-        </tbody>
-      </table>
+        </Table.Body>
+      </Table.Root>
     </>
   );
 };

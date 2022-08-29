@@ -1,3 +1,4 @@
+import { z } from 'zod';
 import { createRouter } from './context';
 
 export const resultsRouter = createRouter()
@@ -32,6 +33,25 @@ export const resultsRouter = createRouter()
         enName: pokemon.en_name,
         vote: pokemon.voteCount ? getVoteDetails(pokemon.voteCount) : null
       }));
+    }
+  })
+  .query('mostVoted', {
+    input: z.object({ type: z.enum(['store', 'keep', 'release']) }),
+    resolve: async () => {
+      return [
+        {
+          id: '123',
+          dexId: '25',
+          spriteUrl:
+            'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png',
+          jpName: 'Pika-shu',
+          enName: 'Pikachu',
+          vote: {
+            percentage: 78,
+            count: 42
+          }
+        }
+      ];
     }
   });
 

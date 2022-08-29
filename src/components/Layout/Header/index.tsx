@@ -15,6 +15,9 @@ export const Header = () => {
           <Link href="/vote">Vote</Link>
         </li>
         <li>
+          <Link href="/hof">Hall of Fame</Link>
+        </li>
+        <li>
           <Link href="/results">Results</Link>
         </li>
       </ul>

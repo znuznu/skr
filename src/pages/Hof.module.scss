@@ -1,0 +1,9 @@
+.hallOfFame {
+  h1 {
+    font-size: 2rem;
+  }
+
+  display: flex;
+  flex-direction: column;
+  row-gap: 3rem;
+}
