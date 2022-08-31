@@ -7,7 +7,7 @@ import resultsStyles from '@/pages/Results.module.scss';
 
 import * as Table from '@/components/primitives/Table';
 
-export type MostVotedProps = inferQueryOutput<'results.mostStored'>;
+export type MostVotedProps = inferQueryOutput<'results.mostKeeped'>;
 
 const MostVoted = ({ title, pokemons }: { title: string; pokemons: MostVotedProps }) => {
   return (
@@ -23,15 +23,15 @@ const MostVoted = ({ title, pokemons }: { title: string; pokemons: MostVotedProp
         </Table.TableHead>
         <Table.Body>
           {pokemons.map((result) => (
-            <Table.Row key={result.dexId}>
+            <Table.Row key={result.pokemon.dexId}>
               <Table.Data>
-                <span className={resultsStyles.dexId}>#{result.dexId}</span>
+                <span className={resultsStyles.dexId}>#{result.pokemon.dexId}</span>
               </Table.Data>
               <Table.Data className={resultsStyles.tdPokemon}>
-                {result.spriteUrl && (
+                {result.pokemon.spriteUrl && (
                   <div>
                     <Image
-                      src={result.spriteUrl}
+                      src={result.pokemon.spriteUrl}
                       width={96}
                       height={96}
                       layout="fixed"
@@ -40,14 +40,13 @@ const MostVoted = ({ title, pokemons }: { title: string; pokemons: MostVotedProp
                   </div>
                 )}
                 <div className={resultsStyles.tdNames}>
-                  <span>{result.enName}</span>
-                  <span className={resultsStyles.jpName}>{result.jpName}</span>
+                  <span>{result.pokemon.enName}</span>
+                  <span className={resultsStyles.jpName}>{result.pokemon.jpName}</span>
                 </div>
               </Table.Data>
               <Table.Data>
-                {/* FIXME Shouldn't be nullable */}
-                <strong>{result.vote!.percentage.toFixed(1)}%</strong> with{' '}
-                <strong>{result.vote!.count}</strong> votes
+                <strong>{result.vote.percentage.toFixed(1)}%</strong> with{' '}
+                <strong>{result.vote.count}</strong> votes
               </Table.Data>
             </Table.Row>
           ))}

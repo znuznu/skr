@@ -1,5 +1,6 @@
 import { Prisma } from '@prisma/client';
-import { z } from 'zod';
+import { TRPCError } from '@trpc/server';
+import { ErrorCode } from '../errors/code';
 import { createRouter } from './context';
 
 export const resultsRouter = createRouter()
@@ -32,7 +33,7 @@ export const resultsRouter = createRouter()
         spriteUrl: pokemon.sprite_url,
         jpName: pokemon.jp_name,
         enName: pokemon.en_name,
-        vote: pokemon.voteCount ? getVoteDetails(pokemon.voteCount) : null
+        vote: pokemon.voteCount ? getVotePercentages(pokemon.voteCount) : null
       }));
     }
   })
@@ -40,174 +41,53 @@ export const resultsRouter = createRouter()
     resolve: async ({ ctx }) => {
       const mostVoted = await ctx.prisma.$queryRaw<MostVotedResult[]>(mostStoredQuery);
 
-      const pokemons = await Promise.all(
-        mostVoted.map(({ pokemonId }) => {
-          return ctx.prisma.pokemon.findFirstOrThrow({
-            where: {
-              id: pokemonId
-            },
-            include: {
-              voteCount: {
-                select: {
-                  storeCount: true,
-                  keepCount: true,
-                  releaseCount: true
-                }
-              }
-            }
-          });
-        })
+      const ids = mostVoted.map(({ pokemonId }) => pokemonId);
+      const pokemons = await ctx.prisma.$queryRaw<PercentageResult[]>(
+        getStoreResult(ids)
       );
 
-      return pokemons.map((pokemon) => {
-        const { id, dex_id, sprite_url, jp_name, en_name, voteCount } = pokemon;
-
-        const result = {
-          id: id,
-          dexId: dex_id,
-          spriteUrl: sprite_url,
-          jpName: jp_name,
-          enName: en_name
-        };
-
-        if (!voteCount) {
-          return {
-            ...result,
-            vote: null
-          };
-        }
-
-        const { storeCount, keepCount, releaseCount } = voteCount;
-
-        const total = storeCount + keepCount + releaseCount;
-
-        return {
-          ...result,
-          vote: {
-            percentage: (storeCount / total) * 100,
-            count: storeCount
-          }
-        };
-      });
+      return pokemons.map(mapPercentageResult);
     }
   })
   .query('mostKeeped', {
     resolve: async ({ ctx }) => {
       const mostVoted = await ctx.prisma.$queryRaw<MostVotedResult[]>(mostKeepedQuery);
 
-      const pokemons = await Promise.all(
-        mostVoted.map(({ pokemonId }) => {
-          return ctx.prisma.pokemon.findFirstOrThrow({
-            where: {
-              id: pokemonId
-            },
-            include: {
-              voteCount: {
-                select: {
-                  storeCount: true,
-                  keepCount: true,
-                  releaseCount: true
-                }
-              }
-            }
-          });
-        })
-      );
+      const ids = mostVoted.map(({ pokemonId }) => pokemonId);
+      const pokemons = await ctx.prisma.$queryRaw<PercentageResult[]>(getKeepResult(ids));
 
-      return pokemons.map((pokemon) => {
-        const { id, dex_id, sprite_url, jp_name, en_name, voteCount } = pokemon;
-
-        const result = {
-          id: id,
-          dexId: dex_id,
-          spriteUrl: sprite_url,
-          jpName: jp_name,
-          enName: en_name
-        };
-
-        if (!voteCount) {
-          return {
-            ...result,
-            vote: null
-          };
-        }
-
-        const { storeCount, keepCount, releaseCount } = voteCount;
-
-        const total = storeCount + keepCount + releaseCount;
-
-        return {
-          ...result,
-          vote: {
-            percentage: (keepCount / total) * 100,
-            count: keepCount
-          }
-        };
-      });
+      return pokemons.map(mapPercentageResult);
     }
   })
   .query('mostReleased', {
     resolve: async ({ ctx }) => {
       const mostVoted = await ctx.prisma.$queryRaw<MostVotedResult[]>(mostReleasedQuery);
 
-      const pokemons = await Promise.all(
-        mostVoted.map(({ pokemonId }) => {
-          return ctx.prisma.pokemon.findFirstOrThrow({
-            where: {
-              id: pokemonId
-            },
-            include: {
-              voteCount: {
-                select: {
-                  storeCount: true,
-                  keepCount: true,
-                  releaseCount: true
-                }
-              }
-            }
-          });
-        })
+      const ids = mostVoted.map(({ pokemonId }) => pokemonId);
+      const pokemons = await ctx.prisma.$queryRaw<PercentageResult[]>(
+        getReleaseResult(ids)
       );
 
-      return pokemons.map((pokemon) => {
-        const { id, dex_id, sprite_url, jp_name, en_name, voteCount } = pokemon;
-
-        const result = {
-          id: id,
-          dexId: dex_id,
-          spriteUrl: sprite_url,
-          jpName: jp_name,
-          enName: en_name
-        };
-
-        if (!voteCount) {
-          return {
-            ...result,
-            vote: null
-          };
-        }
-
-        const { storeCount, keepCount, releaseCount } = voteCount;
-
-        const total = storeCount + keepCount + releaseCount;
-
-        return {
-          ...result,
-          vote: {
-            percentage: (releaseCount / total) * 100,
-            count: releaseCount
-          }
-        };
-      });
+      return pokemons.map(mapPercentageResult);
     }
   });
+
+type PercentageResult = {
+  id: string;
+  en_name: string;
+  dex_id: number;
+  sprite_url: string;
+  jp_name?: string;
+  count: number;
+  percentage: number;
+};
 
 type MostVotedResult = {
   pokemonId: string;
   lowerBound: number;
 };
 
-const getVoteDetails = ({
+const getVotePercentages = ({
   storeCount,
   keepCount,
   releaseCount
@@ -244,3 +124,76 @@ const mostReleasedQuery = Prisma.sql`SELECT "pokemonId", (("releaseCount" + 1.92
                         ("releaseCount" + ("storeCount" + "keepCount"))) / (1 + 3.8416 / ("releaseCount" + ("storeCount" + "keepCount")))
                         AS "lowerBound" FROM "VoteCount" WHERE "releaseCount" + ("storeCount" + "keepCount") > 0
                         ORDER BY "lowerBound" DESC LIMIT ${LIMIT};`;
+
+const getStoreResult = (pokemonIds: string[]) => {
+  return Prisma.sql`
+          SELECT p."id", "en_name", "dex_id", "sprite_url", "jp_name", 
+          "storeCount" as Count,
+          ("storeCount" * 100 / ("storeCount" + "keepCount" + "releaseCount")) as Percentage
+          FROM "Pokemon" p
+          JOIN "VoteCount" vc
+          ON p."id" = vc."pokemonId"
+          JOIN unnest(array[${Prisma.join(
+            pokemonIds
+          )}]) with ordinality as l(pokemonId, idx) ON vc."pokemonId" = l.pokemonId
+          ORDER BY l.idx`;
+};
+
+const getKeepResult = (pokemonIds: string[]) => {
+  return Prisma.sql`
+          SELECT p."id", "en_name", "dex_id", "sprite_url", "jp_name", 
+          "keepCount" as Count,
+          ("keepCount" * 100 / ("storeCount" + "keepCount" + "releaseCount")) as Percentage
+          FROM "Pokemon" p
+          JOIN "VoteCount" vc
+          ON p."id" = vc."pokemonId"
+          JOIN unnest(array[${Prisma.join(
+            pokemonIds
+          )}]) with ordinality as l(pokemonId, idx) ON vc."pokemonId" = l.pokemonId
+          ORDER BY l.idx`;
+};
+
+const getReleaseResult = (pokemonIds: string[]) => {
+  return Prisma.sql`
+          SELECT p."id", "en_name", "dex_id", "sprite_url", "jp_name", 
+          "releaseCount" as Count,
+          ("releaseCount" * 100 / ("storeCount" + "keepCount" + "releaseCount")) as Percentage
+          FROM "Pokemon" p
+          JOIN "VoteCount" vc
+          ON p."id" = vc."pokemonId"
+          JOIN unnest(array[${Prisma.join(
+            pokemonIds
+          )}]) with ordinality as l(pokemonId, idx) ON vc."pokemonId" = l.pokemonId
+          ORDER BY l.idx`;
+};
+
+const mapPercentageResult = ({
+  id,
+  dex_id,
+  sprite_url,
+  jp_name,
+  en_name,
+  count,
+  percentage
+}: PercentageResult) => {
+  if (!count) {
+    throw new TRPCError({
+      code: ErrorCode.INTERNAL,
+      message: 'Count is missing in a percentage result.'
+    });
+  }
+
+  return {
+    pokemon: {
+      id,
+      dexId: dex_id,
+      spriteUrl: sprite_url,
+      jpName: jp_name,
+      enName: en_name
+    },
+    vote: {
+      percentage: Number(percentage),
+      count
+    }
+  };
+};

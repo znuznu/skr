@@ -1,5 +1,6 @@
 import { Pokemon as PrismaPokemon } from '.prisma/client';
 import { TRPCError } from '@trpc/server';
+import { ErrorCode } from '../errors/code';
 import { createRouter } from './context';
 
 export const pokemonRouter = createRouter().query('threePokemon', {
@@ -12,7 +13,7 @@ export const pokemonRouter = createRouter().query('threePokemon', {
 
     if (choosenPokemon.length !== 3) {
       throw new TRPCError({
-        code: 'INTERNAL_SERVER_ERROR',
+        code: ErrorCode.INTERNAL,
         message: 'Oops! Could not find 3 Pokemon...'
       });
     }
