@@ -13,7 +13,7 @@ type ResultsPageProps = InferGetStaticPropsType<typeof getStaticProps>;
 
 const Results = ({ results, total }: ResultsPageProps) => {
   return (
-    <>
+    <div className={styles.results}>
       <p className={styles.information}>Results are updated every hour.</p>
       <p>Total votes: {total} </p>
       <Table.Root>
@@ -73,7 +73,7 @@ const Results = ({ results, total }: ResultsPageProps) => {
           ))}
         </Table.Body>
       </Table.Root>
-    </>
+    </div>
   );
 };
 

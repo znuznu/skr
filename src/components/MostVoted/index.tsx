@@ -1,11 +1,13 @@
-import { inferQueryOutput } from '@/utils/trpc';
 import Image from 'next/image';
 
+import { inferQueryOutput } from '@/utils/trpc';
+
 import styles from './MostVoted.module.scss';
+import resultsStyles from '@/pages/Results.module.scss';
 
 import * as Table from '@/components/primitives/Table';
 
-export type MostVotedProps = inferQueryOutput<'results.mostVoted'>;
+export type MostVotedProps = inferQueryOutput<'results.mostStored'>;
 
 const MostVoted = ({ title, pokemons }: { title: string; pokemons: MostVotedProps }) => {
   return (
@@ -23,9 +25,9 @@ const MostVoted = ({ title, pokemons }: { title: string; pokemons: MostVotedProp
           {pokemons.map((result) => (
             <Table.Row key={result.dexId}>
               <Table.Data>
-                <span className={styles.dexId}>#{result.dexId}</span>
+                <span className={resultsStyles.dexId}>#{result.dexId}</span>
               </Table.Data>
-              <Table.Data className={styles.tdPokemon}>
+              <Table.Data className={resultsStyles.tdPokemon}>
                 {result.spriteUrl && (
                   <div>
                     <Image
@@ -37,14 +39,15 @@ const MostVoted = ({ title, pokemons }: { title: string; pokemons: MostVotedProp
                     />
                   </div>
                 )}
-                <div className={styles.tdNames}>
+                <div className={resultsStyles.tdNames}>
                   <span>{result.enName}</span>
-                  <span className={styles.jpName}>{result.jpName}</span>
+                  <span className={resultsStyles.jpName}>{result.jpName}</span>
                 </div>
               </Table.Data>
               <Table.Data>
-                <strong>{result.vote.percentage.toFixed(1)}%</strong> with{' '}
-                <strong>{result.vote.count}</strong> votes
+                {/* FIXME Shouldn't be nullable */}
+                <strong>{result.vote!.percentage.toFixed(1)}%</strong> with{' '}
+                <strong>{result.vote!.count}</strong> votes
               </Table.Data>
             </Table.Row>
           ))}

@@ -1,5 +1,8 @@
-.resultsTable {
-  min-width: 600px;
+.results {
+  display: flex;
+  flex-direction: column;
+  row-gap: 2rem;
+  text-align: center;
 }
 
 .tdPokemon {
