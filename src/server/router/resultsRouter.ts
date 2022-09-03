@@ -24,16 +24,16 @@ export const resultsRouter = createRouter()
           }
         },
         orderBy: {
-          dex_id: 'asc'
+          dexId: 'asc'
         }
       });
 
       return pokemonsWithCounts.map((pokemon) => ({
         id: pokemon.id,
-        dexId: pokemon.dex_id,
-        spriteUrl: pokemon.sprite_url,
-        jpName: pokemon.jp_name,
-        enName: pokemon.en_name,
+        dexId: pokemon.dexId,
+        spriteUrl: pokemon.spriteUrl,
+        jpName: pokemon.jpName,
+        enName: pokemon.enName,
         vote: pokemon.voteCount ? getVotePercentages(pokemon.voteCount) : null
       }));
     }
@@ -47,6 +47,11 @@ export const resultsRouter = createRouter()
       const query = getMostVotedQuery[kind];
       const mostVoted = await ctx.prisma.$queryRaw<MostVotedResult[]>(query);
       const ids = mostVoted.map(({ pokemonId }) => pokemonId);
+
+      if (!ids.length) {
+        return [];
+      }
+
       const pokemons = await ctx.prisma.$queryRaw<PercentageResult[]>(
         getResultRecord[kind](ids)
       );
@@ -57,10 +62,10 @@ export const resultsRouter = createRouter()
 
 type PercentageResult = {
   id: string;
-  en_name: string;
-  dex_id: number;
-  sprite_url: string;
-  jp_name?: string;
+  enName: string;
+  dexId: number;
+  spriteUrl: string;
+  jpName?: string;
   count: number;
   percentage: number;
 };
@@ -117,7 +122,7 @@ const getMostVotedQuery: Record<ResultKind, Prisma.Sql> = {
 
 const getStoreResult = (pokemonIds: string[]) => {
   return Prisma.sql`
-          SELECT p."id", "en_name", "dex_id", "sprite_url", "jp_name", 
+          SELECT p."id", "enName", "dexId", "spriteUrl", "jpName", 
           "storeCount" as Count,
           ("storeCount" * 100 / ("storeCount" + "keepCount" + "releaseCount")) as Percentage
           FROM "Pokemon" p
@@ -131,7 +136,7 @@ const getStoreResult = (pokemonIds: string[]) => {
 
 const getKeepResult = (pokemonIds: string[]) => {
   return Prisma.sql`
-          SELECT p."id", "en_name", "dex_id", "sprite_url", "jp_name", 
+          SELECT p."id", "enName", "dexId", "spriteUrl", "jpName", 
           "keepCount" as Count,
           ("keepCount" * 100 / ("storeCount" + "keepCount" + "releaseCount")) as Percentage
           FROM "Pokemon" p
@@ -145,7 +150,7 @@ const getKeepResult = (pokemonIds: string[]) => {
 
 const getReleaseResult = (pokemonIds: string[]) => {
   return Prisma.sql`
-          SELECT p."id", "en_name", "dex_id", "sprite_url", "jp_name", 
+          SELECT p."id", "enName", "dexId", "spriteUrl", "jpName", 
           "releaseCount" as Count,
           ("releaseCount" * 100 / ("storeCount" + "keepCount" + "releaseCount")) as Percentage
           FROM "Pokemon" p
@@ -165,27 +170,20 @@ const getResultRecord: Record<ResultKind, (pokemonIds: string[]) => Prisma.Sql> 
 
 const mapPercentageResult = ({
   id,
-  dex_id,
-  sprite_url,
-  jp_name,
-  en_name,
+  dexId,
+  spriteUrl,
+  jpName,
+  enName,
   count,
   percentage
 }: PercentageResult) => {
-  if (!count) {
-    throw new TRPCError({
-      code: ErrorCode.INTERNAL,
-      message: 'Count is missing in a percentage result.'
-    });
-  }
-
   return {
     pokemon: {
       id,
-      dexId: dex_id,
-      spriteUrl: sprite_url,
-      jpName: jp_name,
-      enName: en_name
+      dexId,
+      spriteUrl,
+      jpName,
+      enName
     },
     vote: {
       percentage: Number(percentage),
