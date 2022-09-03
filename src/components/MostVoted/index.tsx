@@ -7,7 +7,7 @@ import resultsStyles from '@/pages/Results.module.scss';
 
 import * as Table from '@/components/primitives/Table';
 
-export type MostVotedProps = inferQueryOutput<'results.mostKeeped'>;
+export type MostVotedProps = inferQueryOutput<'results.mostVoted'>;
 
 const MostVoted = ({ title, pokemons }: { title: string; pokemons: MostVotedProps }) => {
   return (

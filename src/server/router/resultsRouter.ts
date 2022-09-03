@@ -1,5 +1,6 @@
 import { Prisma } from '@prisma/client';
 import { TRPCError } from '@trpc/server';
+import { z } from 'zod';
 import { ErrorCode } from '../errors/code';
 import { createRouter } from './context';
 
@@ -37,35 +38,17 @@ export const resultsRouter = createRouter()
       }));
     }
   })
-  .query('mostStored', {
-    resolve: async ({ ctx }) => {
-      const mostVoted = await ctx.prisma.$queryRaw<MostVotedResult[]>(mostStoredQuery);
-
+  .query('mostVoted', {
+    input: z.object({
+      kind: z.enum(['store', 'keep', 'release'])
+    }),
+    resolve: async ({ ctx, input }) => {
+      const { kind } = input;
+      const query = getMostVotedQuery[kind];
+      const mostVoted = await ctx.prisma.$queryRaw<MostVotedResult[]>(query);
       const ids = mostVoted.map(({ pokemonId }) => pokemonId);
       const pokemons = await ctx.prisma.$queryRaw<PercentageResult[]>(
-        getStoreResult(ids)
-      );
-
-      return pokemons.map(mapPercentageResult);
-    }
-  })
-  .query('mostKeeped', {
-    resolve: async ({ ctx }) => {
-      const mostVoted = await ctx.prisma.$queryRaw<MostVotedResult[]>(mostKeepedQuery);
-
-      const ids = mostVoted.map(({ pokemonId }) => pokemonId);
-      const pokemons = await ctx.prisma.$queryRaw<PercentageResult[]>(getKeepResult(ids));
-
-      return pokemons.map(mapPercentageResult);
-    }
-  })
-  .query('mostReleased', {
-    resolve: async ({ ctx }) => {
-      const mostVoted = await ctx.prisma.$queryRaw<MostVotedResult[]>(mostReleasedQuery);
-
-      const ids = mostVoted.map(({ pokemonId }) => pokemonId);
-      const pokemons = await ctx.prisma.$queryRaw<PercentageResult[]>(
-        getReleaseResult(ids)
+        getResultRecord[kind](ids)
       );
 
       return pokemons.map(mapPercentageResult);
@@ -125,6 +108,13 @@ const mostReleasedQuery = Prisma.sql`SELECT "pokemonId", (("releaseCount" + 1.92
                         AS "lowerBound" FROM "VoteCount" WHERE "releaseCount" + ("storeCount" + "keepCount") > 0
                         ORDER BY "lowerBound" DESC LIMIT ${LIMIT};`;
 
+type ResultKind = 'store' | 'keep' | 'release';
+const getMostVotedQuery: Record<ResultKind, Prisma.Sql> = {
+  store: mostStoredQuery,
+  keep: mostKeepedQuery,
+  release: mostReleasedQuery
+};
+
 const getStoreResult = (pokemonIds: string[]) => {
   return Prisma.sql`
           SELECT p."id", "en_name", "dex_id", "sprite_url", "jp_name", 
@@ -165,6 +155,12 @@ const getReleaseResult = (pokemonIds: string[]) => {
             pokemonIds
           )}]) with ordinality as l(pokemonId, idx) ON vc."pokemonId" = l.pokemonId
           ORDER BY l.idx`;
+};
+
+const getResultRecord: Record<ResultKind, (pokemonIds: string[]) => Prisma.Sql> = {
+  store: getStoreResult,
+  keep: getKeepResult,
+  release: getReleaseResult
 };
 
 const mapPercentageResult = ({

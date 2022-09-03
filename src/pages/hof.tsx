@@ -33,9 +33,9 @@ export const getStaticProps = async () => {
   return {
     props: {
       results: {
-        store: await ssg.fetchQuery('results.mostStored'),
-        keep: await ssg.fetchQuery('results.mostKeeped'),
-        release: await ssg.fetchQuery('results.mostReleased')
+        store: await ssg.fetchQuery('results.mostVoted', { kind: 'store' }),
+        keep: await ssg.fetchQuery('results.mostVoted', { kind: 'keep' }),
+        release: await ssg.fetchQuery('results.mostVoted', { kind: 'release' })
       }
     },
     revalidate: REVALIDATE_TIME_IN_SECONDS
