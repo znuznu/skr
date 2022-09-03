@@ -12,12 +12,12 @@ const mapPokemonToCsv = (
   japaneseName?: string
 ): string => {
   const pokemonMapped = {
-    dex_id: pokeApiPokemon.id,
+    dexId: pokeApiPokemon.id,
     types: pokeApiPokemon.types.map((t) => t.type.name),
-    en_name: pokeApiPokemon.name,
-    jp_name: japaneseName,
-    sprite_url: pokeApiPokemon.sprites.front_default,
-    artwork_url: pokeApiPokemon.sprites.other['official-artwork'].front_default
+    enName: pokeApiPokemon.name,
+    jpName: japaneseName,
+    spriteUrl: pokeApiPokemon.sprites.front_default,
+    artworkUrl: pokeApiPokemon.sprites.other['official-artwork'].front_default
   };
 
   return Object.values(pokemonMapped).join(';') + '\n';
@@ -67,12 +67,12 @@ const seed = async () => {
       return [
         ...acc,
         {
-          dex_id: Number.parseInt(parts[0]),
+          dexId: Number.parseInt(parts[0]),
           types: parts[1].split(','),
-          en_name: parts[2],
-          jp_name: parts[3],
-          sprite_url: parts[4],
-          artwork_url: parts[5]
+          enName: parts[2],
+          jpName: parts[3],
+          spriteUrl: parts[4],
+          artworkUrl: parts[5]
         }
       ];
     }, []);

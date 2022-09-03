@@ -13,12 +13,12 @@ datasource db {
 model Pokemon {
     id String @id @default(cuid())
 
-    dex_id Int
+    dexId Int
     types String[]
-    en_name String
-    jp_name String?
-    artwork_url String?
-    sprite_url String?
+    enName String
+    jpName String?
+    artworkUrl String?
+    spriteUrl String?
 
     voteCount VoteCount?
 
